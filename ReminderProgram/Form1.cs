@@ -147,7 +147,7 @@ namespace ReminderProgram
 
         private void updateStripMenuItem1_Click(object sender, EventArgs e)
         {
-
+            Updates.Check();
         }
     }
 }
