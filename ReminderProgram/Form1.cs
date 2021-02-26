@@ -60,9 +60,47 @@ namespace ReminderProgram
             dataGridView.DataSource = null;
             dataGridView.Refresh();
             DataSet ds = new DataSet();
-            ds.ReadXml(Properties.Settings.Default.RemindersPath);
-            dataGridView.DataSource = ds.Tables[0];
-            dataGridView.Refresh();
+            if (Reminders.Valid(Properties.Settings.Default.RemindersPath))
+            {
+                ds.ReadXml(Properties.Settings.Default.RemindersPath);
+                dataGridView.DataSource = ds.Tables[0];
+                dataGridView.Refresh();
+            } else
+            {
+                DialogResult result;
+
+                if (OtherFunctions.ValidXML(Properties.Settings.Default.RemindersPath))
+                {
+                    Debugger.Log("Form1", "Invalid Reminder XML");
+
+                    result = MessageBox.Show("The Reminder XML is invalid for this application.\nWould you like to Retry, run Setup (Abort), or load a file (Ignore)?", "Invalid Reminder XML", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+                } else
+                {
+                    result = MessageBox.Show("The XML is invalid for this application.\nWould you like to Retry, run Setup (Abort), or load a file (Ignore)?", "Invalid XML", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+                }
+
+
+                if (result == DialogResult.Retry)
+                {
+                    DataReload();
+                    return;
+                }
+                else if (result == DialogResult.Abort)
+                {
+                    Properties.Settings.Default.FirstTime = true;
+                    Properties.Settings.Default.Save();
+                    Application.Restart();
+                }
+                else if (result == DialogResult.Ignore)
+                {
+                    LoadFile();
+                }
+                else
+                {
+                    DataReload();
+                    return;
+                }
+            }
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -179,6 +217,17 @@ namespace ReminderProgram
         private void refreshButton_Click(object sender, EventArgs e)
         {
             DataReload();
+        }
+
+        private void addButton_Click(object sender, EventArgs e)
+        {
+            AddReminderForm addForm = new AddReminderForm();
+            addForm.ShowDialog();
+        }
+
+        private static void LoadFile()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -64,7 +64,7 @@ namespace ReminderProgram
                         if (OtherFunctions.ValidXML(mainFileDir))
                         {
                             XDocument oldDoc = XDocument.Load(mainFileDir);
-                            oldDoc.Save(Path.Combine(mainFileDir, "_old.xml"));
+                            oldDoc.Save(Path.Combine(mainDir, "reminders_old.xml"));
                         }
 
                         XDocument doc = Reminders.Generate();

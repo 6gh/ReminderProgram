@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace ReminderProgram
@@ -63,6 +64,18 @@ namespace ReminderProgram
             doc.Element("Reminders").Add(reminder);
 
             return doc;
+        }
+
+        internal static void RunPreview(string name, string text)
+        {
+            text += $"\n\nClick Cancel to reremind in {Properties.Settings.Default.ReRemind} minutes";
+
+            DialogResult result = MessageBox.Show(text, name, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+
+            if (result == DialogResult.Cancel)
+            {
+                MessageBox.Show($"Clicking this would usually remind you again in {Properties.Settings.Default.ReRemind} minutes (Change in Settings > Other Settings > Re-Remind) but since this is a preview, it will not.", "Preview", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

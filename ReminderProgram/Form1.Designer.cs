@@ -59,13 +59,13 @@ namespace ReminderProgram
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.addButton = new System.Windows.Forms.Button();
-            this.removeButton = new System.Windows.Forms.Button();
-            this.refreshButton = new System.Windows.Forms.Button();
             this.previewButton = new System.Windows.Forms.Button();
+            this.refreshButton = new System.Windows.Forms.Button();
+            this.removeButton = new System.Windows.Forms.Button();
+            this.addButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.startButton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.startButton = new System.Windows.Forms.Button();
             this.taskiconMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -272,7 +272,7 @@ namespace ReminderProgram
             // 
             this.logModeToolStripMenuItem.CheckOnClick = true;
             this.logModeToolStripMenuItem.Name = "logModeToolStripMenuItem";
-            this.logModeToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.logModeToolStripMenuItem.Size = new System.Drawing.Size(160, 26);
             this.logModeToolStripMenuItem.Text = "Log Mode";
             this.logModeToolStripMenuItem.Click += new System.EventHandler(this.logModeToolStripMenuItem_Click);
             // 
@@ -314,23 +314,14 @@ namespace ReminderProgram
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Reminder Actions";
             // 
-            // addButton
+            // previewButton
             // 
-            this.addButton.Location = new System.Drawing.Point(62, 32);
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(90, 30);
-            this.addButton.TabIndex = 0;
-            this.addButton.Text = "Add";
-            this.addButton.UseVisualStyleBackColor = true;
-            // 
-            // removeButton
-            // 
-            this.removeButton.Location = new System.Drawing.Point(272, 32);
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(90, 30);
-            this.removeButton.TabIndex = 1;
-            this.removeButton.Text = "Remove";
-            this.removeButton.UseVisualStyleBackColor = true;
+            this.previewButton.Location = new System.Drawing.Point(725, 32);
+            this.previewButton.Name = "previewButton";
+            this.previewButton.Size = new System.Drawing.Size(90, 30);
+            this.previewButton.TabIndex = 3;
+            this.previewButton.Text = "Preview";
+            this.previewButton.UseVisualStyleBackColor = true;
             // 
             // refreshButton
             // 
@@ -342,14 +333,24 @@ namespace ReminderProgram
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
-            // previewButton
+            // removeButton
             // 
-            this.previewButton.Location = new System.Drawing.Point(725, 32);
-            this.previewButton.Name = "previewButton";
-            this.previewButton.Size = new System.Drawing.Size(90, 30);
-            this.previewButton.TabIndex = 3;
-            this.previewButton.Text = "Preview";
-            this.previewButton.UseVisualStyleBackColor = true;
+            this.removeButton.Location = new System.Drawing.Point(272, 32);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(90, 30);
+            this.removeButton.TabIndex = 1;
+            this.removeButton.Text = "Remove";
+            this.removeButton.UseVisualStyleBackColor = true;
+            // 
+            // addButton
+            // 
+            this.addButton.Location = new System.Drawing.Point(62, 32);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(90, 30);
+            this.addButton.TabIndex = 0;
+            this.addButton.Text = "Add";
+            this.addButton.UseVisualStyleBackColor = true;
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
             // groupBox3
             // 
@@ -362,15 +363,6 @@ namespace ReminderProgram
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Application Actions";
             // 
-            // startButton
-            // 
-            this.startButton.Location = new System.Drawing.Point(272, 32);
-            this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(90, 30);
-            this.startButton.TabIndex = 4;
-            this.startButton.Text = "Start";
-            this.startButton.UseVisualStyleBackColor = true;
-            // 
             // button2
             // 
             this.button2.Enabled = false;
@@ -380,6 +372,15 @@ namespace ReminderProgram
             this.button2.TabIndex = 5;
             this.button2.Text = "Stop";
             this.button2.UseVisualStyleBackColor = true;
+            // 
+            // startButton
+            // 
+            this.startButton.Location = new System.Drawing.Point(272, 32);
+            this.startButton.Name = "startButton";
+            this.startButton.Size = new System.Drawing.Size(90, 30);
+            this.startButton.TabIndex = 4;
+            this.startButton.Text = "Start";
+            this.startButton.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
