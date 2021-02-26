@@ -27,8 +27,7 @@ namespace ReminderProgram
 
             //setup tray icon
             notifyIcon1.Icon = Properties.Resources.Icon;
-            notifyIcon1.Visible = false;
-            notifyIcon1.ContextMenuStrip = taskiconMenuStrip1;
+            notifyIcon1.Visible = true;
 
             //setup toolstrips and data and such (or something)
             doNotDisturbToolStripMenuItem.Checked = Properties.Settings.Default.DoNotDisturb; //setup dnd stuff
@@ -41,6 +40,13 @@ namespace ReminderProgram
             versionStripMenuItem1.Text = versionStripMenuItem1.Text.Replace("{VERSION}", $"{Properties.Settings.Default.Version}"); //setup versions toolstrip
             versions2toolstrip = version2StripMenuItem2;
 
+            logModeToolStripMenuItem.Checked = Debugger.LogMode;
+
+            if (Program.DebugMode)
+            {
+                debugToolStripMenuItem.Visible = true;
+            }
+
             //setup datagridview
             dataGridView = dataGridView1;
             DataReload();
@@ -49,12 +55,14 @@ namespace ReminderProgram
             Updates.Check(true);
         }
 
-        private static void DataReload()
+        internal static void DataReload()
         {
             dataGridView.DataSource = null;
+            dataGridView.Refresh();
             DataSet ds = new DataSet();
             ds.ReadXml(Properties.Settings.Default.RemindersPath);
             dataGridView.DataSource = ds.Tables[0];
+            dataGridView.Refresh();
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -62,9 +70,8 @@ namespace ReminderProgram
             // If application is minimized
             if(WindowState == FormWindowState.Minimized)
             {
-                //hide form and show tray icon
+                //hide form
                 Hide();
-                notifyIcon1.Visible = true;
 
                 //send balloon
                 notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
@@ -82,13 +89,19 @@ namespace ReminderProgram
 
             //stop debugger
             Debugger.Stop();
+
+            //save settings
+            Properties.Settings.Default.Save();
         }
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            Show();
-            WindowState = FormWindowState.Normal;
-            notifyIcon1.Visible = false;
+            if (!Visible)
+            {
+                //showing form
+                Show();
+                WindowState = FormWindowState.Normal;
+            }
         }
 
         private void doNotDisturbToolStripMenuItem_Click(object sender, EventArgs e)
@@ -115,9 +128,9 @@ namespace ReminderProgram
         {
             if (!Visible)
             {
+                //showing form
                 Show();
                 WindowState = FormWindowState.Normal;
-                notifyIcon1.Visible = false;
             }
         }
 
@@ -149,6 +162,23 @@ namespace ReminderProgram
         private void updateStripMenuItem1_Click(object sender, EventArgs e)
         {
             Updates.Check();
+        }
+
+        private void logModeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Debugger.ToggleLogMode();
+        }
+
+        private void otherSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OtherSettings form = new OtherSettings();
+
+            form.ShowDialog();
+        }
+
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            DataReload();
         }
     }
 }

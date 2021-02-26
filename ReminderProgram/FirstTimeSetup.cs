@@ -27,9 +27,9 @@ namespace ReminderProgram
             {
                 Properties.Settings.Default.FirstTime = false;
                 Properties.Settings.Default.Save();
-                //Application.Restart();
+                Application.Restart();
                 Debugger.Stop();
-                Application.Exit();
+                //Application.Exit();
             } else
             {
                 Debugger.Error("Setup", $"Failed setup, returned something else than done message\n(Received: {a})");

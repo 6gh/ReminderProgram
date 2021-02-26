@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace ReminderProgram
@@ -84,14 +86,27 @@ namespace ReminderProgram
 
         internal static void ToggleStartup(bool value)
         {
+            RegistryKey key = Registry.CurrentUser.OpenSubKey
+                    ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
             if (Properties.Settings.Default.RunOnStartup != value)
             {
                 Properties.Settings.Default.RunOnStartup = value;
+                Properties.Settings.Default.Save();
             }
 
             if(Properties.Settings.Default.RunOnStartup)
             {
+                key.SetValue("ReminderProgram", Application.ExecutablePath);
+            } 
+            else
+            {
+                string[] names = key.GetValueNames();
 
+                if (Array.IndexOf(names, "ReminderProgram") > -1)
+                {
+                    key.DeleteValue("ReminderProgram", false);
+                }
             }
         }
     }

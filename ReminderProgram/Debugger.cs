@@ -5,14 +5,19 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ReminderProgram
 {
     public class Debugger
     {
-        public static TextWriter oldConsoleOut;
-        public static StreamWriter sw;
+        private static FileStream fs = new FileStream(@"output.txt", FileMode.Create); //save to file in same dir
+        private static StreamWriter sw = new StreamWriter(fs);
+        private static TextWriter oldConsoleOut;
+        private static int LogTimesRan = 0;
+
         public static bool running = false;
+        public static bool LogMode = false;
 
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern bool AllocConsole();
@@ -28,10 +33,8 @@ namespace ReminderProgram
 
             oldConsoleOut = Console.Out;
 
-            FileStream fs = new FileStream("output.txt", FileMode.Create); //save to file in same dir
-            sw = new StreamWriter(fs);
-            // uncomment to enable log mode
-            //Console.WriteLine("Log Mode"); Console.SetOut(sw);
+            //uncomment to enable log mode
+            //ToggleLogMode();
 
             //Console.SetWindowSize(130, 20);
             Console.BackgroundColor = ConsoleColor.DarkMagenta;
@@ -54,6 +57,30 @@ namespace ReminderProgram
             Console.WriteLine();
 
             running = true;
+        }
+
+        internal static void ToggleLogMode()
+        {
+            if (!LogMode)
+            {
+                LogTimesRan++;
+                Console.WriteLine("Activating Log Mode...");
+                Console.SetOut(sw);
+                LogMode = true;
+                Console.WriteLine($"[{OtherFunctions.GetCurrentDateTime(true)}] Activated Log Mode");
+            } else
+            {
+                Console.BackgroundColor = ConsoleColor.DarkBlue;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine();
+                Console.WriteLine($"[{OtherFunctions.GetCurrentDateTime(true)}] Deactivating Log mode...");
+                Console.WriteLine();
+                Console.SetOut(oldConsoleOut);
+                LogMode = false;
+                Console.WriteLine($"[{OtherFunctions.GetCurrentDateTime(true)}] Dectivated Log Mode");
+                Console.WriteLine();
+                Console.ResetColor();
+            }
         }
 
         public static void Log(string name, string log)
@@ -91,6 +118,11 @@ namespace ReminderProgram
                 Console.WriteLine($"[{OtherFunctions.GetCurrentDateTime()}] Saved."); 
                 Console.WriteLine();
                 Console.ResetColor();
+
+                if (LogTimesRan == 0)
+                {
+                    File.Delete("output.txt");
+                }
             }
         }
     }
