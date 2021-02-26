@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Reminders>
+	
+	<Reminder>
+		<Name>Reminder</Name>
+		<Context>Your reminder is now!</Context>
+		<Time>3:00</Time>
+		<Date>12/31/2021</Date>
+		<Repeat>Once</Repeat>
+	</Reminder>
+	
+</Reminders>
