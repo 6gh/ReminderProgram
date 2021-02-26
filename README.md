@@ -7,7 +7,7 @@
 
 This is a Reminder program for Windows in which you set reminders for yourself and start it. Then at the set times and dates, a notification pop-up will show up and give you your reminder.
 
-> Note: This simple program was my first Windows Application I ever made and the first release (v3) was my first time ever using c#. Versions 1 and 2 were made in python, and are not available for download.
+> Note: This application was my first Windows Application I ever made and the first release (v3) was my first time ever using c#. Versions 1 and 2 were made in python, and are not available for download.
 
 ## Who is this for?
 
@@ -35,7 +35,7 @@ I have tried to code in a lot of features into this program and so far it has:
 
 > For a video tutorial, click here.
 
-> For a text tutorial, [click here](https://github.com/6gh/AntiProcrastinationProgram/blob/master/tutorial.md).
+> For a text tutorial, [click here](https://github.com/6gh/ReminderProgram/blob/master/tutorial.md).
 
 ## License
-[MIT](https://github.com/6gh/AntiProcrastinationProgram/blob/master/LICENSE)
+[MIT](https://github.com/6gh/ReminderProgram/blob/master/LICENSE)
