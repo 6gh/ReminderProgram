@@ -79,7 +79,7 @@ namespace ReminderProgram
             this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(913, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(913, 30);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -147,12 +147,14 @@ namespace ReminderProgram
             this.retimeStripMenuItem1,
             this.timeIntervalToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(76, 24);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(76, 26);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // doNotDisturbToolStripMenuItem
             // 
+            this.doNotDisturbToolStripMenuItem.Checked = true;
             this.doNotDisturbToolStripMenuItem.CheckOnClick = true;
+            this.doNotDisturbToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.doNotDisturbToolStripMenuItem.Name = "doNotDisturbToolStripMenuItem";
             this.doNotDisturbToolStripMenuItem.Size = new System.Drawing.Size(250, 26);
             this.doNotDisturbToolStripMenuItem.Text = "Do Not Disturb";
@@ -170,7 +172,9 @@ namespace ReminderProgram
             // 
             // updaterStripMenuItem1
             // 
+            this.updaterStripMenuItem1.Checked = true;
             this.updaterStripMenuItem1.CheckOnClick = true;
+            this.updaterStripMenuItem1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.updaterStripMenuItem1.Name = "updaterStripMenuItem1";
             this.updaterStripMenuItem1.Size = new System.Drawing.Size(250, 26);
             this.updaterStripMenuItem1.Text = "Updater";

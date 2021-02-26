@@ -102,6 +102,7 @@ namespace ReminderProgram
         {
             Properties.Settings.Default.RunOnStartup = startOnStartupToolStripMenuItem.Checked;
             Properties.Settings.Default.Save();
+            OtherFunctions.ToggleStartup(startOnStartupToolStripMenuItem.Checked);
         }
 
         private void exitStripMenuItem1_Click(object sender, EventArgs e)

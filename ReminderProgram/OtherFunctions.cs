@@ -81,5 +81,18 @@ namespace ReminderProgram
                 return DateTime.Now.ToString("dd/MM/yyyy @ HH:mm.ss");
             }
         }
+
+        internal static void ToggleStartup(bool value)
+        {
+            if (Properties.Settings.Default.RunOnStartup != value)
+            {
+                Properties.Settings.Default.RunOnStartup = value;
+            }
+
+            if(Properties.Settings.Default.RunOnStartup)
+            {
+
+            }
+        }
     }
 }
