@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace ReminderProgram
     {
         internal static DataGridView dataGridView;
         internal static ToolStripMenuItem versions2toolstrip;
+        internal static OpenFileDialog openFileDialog;
 
         public Form1()
         {
@@ -28,6 +30,9 @@ namespace ReminderProgram
             //setup tray icon
             notifyIcon1.Icon = Properties.Resources.Icon;
             notifyIcon1.Visible = true;
+
+            //setup open dialog
+            openFileDialog = openFileDialog1;
 
             //setup toolstrips and data and such (or something)
             doNotDisturbToolStripMenuItem.Checked = Properties.Settings.Default.DoNotDisturb; //setup dnd stuff
@@ -225,9 +230,35 @@ namespace ReminderProgram
             addForm.ShowDialog();
         }
 
+        private void importCtrlOToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadFile();
+        }
         private static void LoadFile()
         {
-            throw new NotImplementedException();
+            try
+            {
+                openFileDialog.InitialDirectory = Path.GetDirectoryName(Properties.Settings.Default.RemindersPath);
+            } catch (Exception e)
+            {
+                Debugger.Error("LoadFile", e.Message);
+                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            }
+
+            try
+            {
+                openFileDialog.FileName = Path.GetFileName(Properties.Settings.Default.RemindersPath);
+            } catch (Exception e)
+            {
+                Debugger.Error("LoadFile", e.Message);
+            }
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.RemindersPath = openFileDialog.FileName;
+                Properties.Settings.Default.Save();
+                DataReload();
+            }
         }
     }
 }

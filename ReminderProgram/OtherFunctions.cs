@@ -11,14 +11,6 @@ namespace ReminderProgram
 {
     public class OtherFunctions
     {
-        public static string NewReminderID()
-        {
-            Random rand = new Random();
-            int value = rand.Next(1000);
-
-            return value.ToString("000");
-        }
-
         public static bool ValidXML(string path)
         {
             try
@@ -47,11 +39,41 @@ namespace ReminderProgram
             }
         }
 
+        public static bool ValidTime(DateTime value)
+        {
+            try
+            {
+                string time = value.ToString("HH:mm.ss");
+                if (ValidString(time)) return true;
+                else return false;
+            }
+            catch (Exception e)
+            {
+                Debugger.Error("ValidTime", e.Message);
+                return false;
+            }
+        }
+
         public static bool ValidDate(string value)
         {
             try
             {
                 string date = DateTime.Parse(value).ToString("MM/dd/yyyy");
+                if (ValidString(date)) return true;
+                else return false;
+            }
+            catch (Exception e)
+            {
+                Debugger.Error("ValidDate", e.Message);
+                return false;
+            }
+        }
+
+        public static bool ValidDate(DateTime value)
+        {
+            try
+            {
+                string date = value.ToString("MM/dd/yyyy");
                 if (ValidString(date)) return true;
                 else return false;
             }

@@ -66,6 +66,7 @@ namespace ReminderProgram
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
             this.startButton = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.taskiconMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -155,8 +156,9 @@ namespace ReminderProgram
             // 
             this.importCtrlOToolStripMenuItem.Name = "importCtrlOToolStripMenuItem";
             this.importCtrlOToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.importCtrlOToolStripMenuItem.Size = new System.Drawing.Size(222, 26);
+            this.importCtrlOToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.importCtrlOToolStripMenuItem.Text = "Import...";
+            this.importCtrlOToolStripMenuItem.Click += new System.EventHandler(this.importCtrlOToolStripMenuItem_Click);
             // 
             // exportCtrlSToolStripMenuItem
             // 
@@ -217,7 +219,7 @@ namespace ReminderProgram
             this.toolStripSeparator2,
             this.otherSettingsToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(76, 24);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(76, 26);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // doNotDisturbToolStripMenuItem
@@ -382,6 +384,14 @@ namespace ReminderProgram
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.DefaultExt = "xml";
+            this.openFileDialog1.FileName = "reminders";
+            this.openFileDialog1.Filter = "XML Files (*.xml)|*.xml";
+            this.openFileDialog1.FilterIndex = 2;
+            this.openFileDialog1.Title = "Import Reminders XML";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -449,6 +459,7 @@ namespace ReminderProgram
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button startButton;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 

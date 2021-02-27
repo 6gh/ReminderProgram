@@ -75,15 +75,41 @@ namespace ReminderProgram
         {
             //check if texts are valid
             if (!OtherFunctions.ValidString(nametextBox1.Text)) MessageBox.Show("Please provide a name for the reminder.", "Invalid Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            if (!OtherFunctions.ValidString(textBox1.Text)) MessageBox.Show("Please provide text for the reminder.", "Invalid Text", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (!OtherFunctions.ValidString(textBox1.Text)) MessageBox.Show("Please provide text for the reminder.", "Invalid Text", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                //run reminder preview
+                Reminders.RunPreview(nametextBox1.Text, textBox1.Text);
 
-            //run reminder thing
-            Reminders.RunPreview(nametextBox1.Text, textBox1.Text);
+            }
         }
 
         private void addbutton1_Click(object sender, EventArgs e)
         {
+            //make datetime variables
+            DateTime dateTime = new DateTime(Int32.Parse(yearnumericUpDown1.Value.ToString()), Int32.Parse(monthnumericUpDown1.Value.ToString()), Int32.Parse(daynumericUpDown1.Value.ToString()), Int32.Parse(hournumericUpDown1.Value.ToString()), Int32.Parse(minutenumericUpDown1.Value.ToString()), 0);
 
+            //check if valid options
+            if (!OtherFunctions.ValidString(nametextBox1.Text)) MessageBox.Show("Please provide a name for the reminder.", "Invalid Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (!OtherFunctions.ValidString(textBox1.Text)) MessageBox.Show("Please provide text for the reminder.", "Invalid Text", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (!OtherFunctions.ValidDate(dateTime.Date)) MessageBox.Show("Please provide a valid date", "Invalid Date", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (!OtherFunctions.ValidTime(dateTime.ToString("HH:mm"))) MessageBox.Show("Please provide a valid time", "Invalid Time", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (!Reminders.ValidRepetition(repeatcomboBox1.SelectedItem.ToString())) MessageBox.Show("Please provide a valid repeat option", "Invalid Repeat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                Reminders.Add(nametextBox1.Text, textBox1.Text, dateTime, repeatcomboBox1.SelectedItem.ToString());
+            }
+
+            //close or not
+            if (closeAfterAddToolStripMenuItem.Checked)
+            {
+                Close();
+            }
+        }
+
+        private void AddReminderForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Form1.DataReload();
         }
     }
 }
