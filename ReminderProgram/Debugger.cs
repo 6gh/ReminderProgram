@@ -11,8 +11,8 @@ namespace ReminderProgram
 {
     public class Debugger
     {
-        private static FileStream fs = new FileStream(@"output.txt", FileMode.Create); //save to file in same dir
-        private static StreamWriter sw = new StreamWriter(fs);
+        private static FileStream fs;
+        private static StreamWriter sw;
         private static TextWriter oldConsoleOut;
         private static int LogTimesRan = 0;
 
@@ -61,6 +61,20 @@ namespace ReminderProgram
 
         internal static void ToggleLogMode()
         {
+            if (LogTimesRan == 0)
+            {
+                try
+                {
+                    fs = new FileStream(@"output.txt", FileMode.Create); //save to file in same dir
+                    sw = new StreamWriter(fs);
+                } catch (Exception e)
+                {
+                    Error("ToggleLogMode", e.Message);
+                    MessageBox.Show($"Error while turning Log Mode:\n\n{e.Message}", "Log Mode", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
             if (!LogMode)
             {
                 LogTimesRan++;
@@ -113,15 +127,26 @@ namespace ReminderProgram
                 Console.WriteLine();
                 Console.WriteLine($"[{OtherFunctions.GetCurrentDateTime()}] Stopping..."); 
                 Console.WriteLine($"[{OtherFunctions.GetCurrentDateTime()}] Saving...");
-                Console.SetOut(oldConsoleOut);
-                sw.Close();
+
+                //save file if log times ran
+                if (LogTimesRan > 0)
+                {
+                    Console.SetOut(oldConsoleOut);
+                    sw.Close();
+                }
                 Console.WriteLine($"[{OtherFunctions.GetCurrentDateTime()}] Saved."); 
                 Console.WriteLine();
                 Console.ResetColor();
 
                 if (LogTimesRan == 0)
                 {
-                    File.Delete("output.txt");
+                    try
+                    {
+                        File.Delete("output.txt");
+                    } catch (Exception e)
+                    {
+                        Error("Debugger.Stop", e.Message);
+                    }
                 }
             }
         }

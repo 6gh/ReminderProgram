@@ -40,9 +40,11 @@ namespace ReminderProgram
         {
             return await Task.Run(() =>
             {
+                //dir variables
                 string mainDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ReminderProgram");
                 string mainFileDir = Path.Combine(mainDir, "reminders.xml");
 
+                //setup directory if not already set up
                 if (!Directory.Exists(mainDir))
                 {
                     Directory.CreateDirectory(mainDir);
@@ -50,36 +52,63 @@ namespace ReminderProgram
                 }
                 else Debugger.Log("Setup", "Directory already exists");
 
-                if (!File.Exists(mainFileDir))
+                if (!File.Exists(mainFileDir)) //if xml file doesnt exist
                 {
+                    //generate new xml and save
                     XDocument doc = Reminders.Generate();
                     doc.Save(mainFileDir);
                     Properties.Settings.Default.RemindersPath = mainFileDir;
                 }
-                else
+                else //if xml file does exist
                 {
                     Debugger.Log("Setup", "File exists, parsing");
-                    if (!Reminders.Valid(mainFileDir))
+                    if (!Reminders.Valid(mainFileDir)) //if it isnt a valid xml for this app
                     {
-                        if (OtherFunctions.ValidXML(mainFileDir))
+                        if (OtherFunctions.ValidXML(mainFileDir)) //if it even is a valid xml at all
                         {
+                            //save old xml to _old.xml
                             XDocument oldDoc = XDocument.Load(mainFileDir);
                             oldDoc.Save(Path.Combine(mainDir, "reminders_old.xml"));
                         }
 
+                        //generate new xml and save
                         XDocument doc = Reminders.Generate();
                         doc.Save(mainFileDir);
                         Properties.Settings.Default.RemindersPath = mainFileDir;
                     }
-                    else
+                    else //if it is a valid xml for this app
                     {
-                        Debugger.Log("Setup", "Valid XML, using that");
-                        Properties.Settings.Default.RemindersPath = mainFileDir;
+                        Debugger.Log("Setup", "Valid XML, asking to use it");
+
+                        DialogResult dialogResult = MessageBox.Show($"Found a valid XML, '{mainFileDir}'\nWould you like to use this file(Y), or create a new one (N)?", "Setup", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                        if (dialogResult == DialogResult.Yes) //if user said yes
+                        {
+                            //set the valid xml to the app's xml
+                            Debugger.Log("Setup", "using Valid XML");
+                            Properties.Settings.Default.RemindersPath = mainFileDir;
+                        } else
+                        {
+                            Debugger.Log("Setup", "renaming and generating");
+
+                            //save old xml to _old.xml
+                            XDocument oldDoc = XDocument.Load(mainFileDir);
+                            oldDoc.Save(Path.Combine(mainDir, "reminders_old.xml"));
+
+                            //generate new xml, save and set the xml to the app's xml
+                            XDocument doc = Reminders.Generate();
+                            doc.Save(mainFileDir);
+                            Properties.Settings.Default.RemindersPath = mainFileDir;
+                        }
+
                     }
                 }
 
+                //end task thing
                 return "done";
             });
         }
     }
 }
+
+//hi

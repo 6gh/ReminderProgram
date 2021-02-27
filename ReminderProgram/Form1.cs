@@ -57,7 +57,14 @@ namespace ReminderProgram
             DataReload();
 
             //check for updates
-            Updates.Check(true);
+            try
+            {
+                Updates.Check(true);
+            } catch (Exception ex)
+            {
+                Debugger.Error("Updates", ex.Message);
+                version2StripMenuItem2.Text = "Couldn't Check for Updates";
+            }
         }
 
         internal static void DataReload()
@@ -204,7 +211,16 @@ namespace ReminderProgram
 
         private void updateStripMenuItem1_Click(object sender, EventArgs e)
         {
-            Updates.Check();
+            try
+            {
+                Updates.Check();
+            }
+            catch (Exception ex)
+            {
+                Debugger.Error("Updates", ex.Message);
+                version2StripMenuItem2.Text = "Couldn't Check for Updates";
+                MessageBox.Show($"Failed to check for updates\n\n{ex.Message}", "Updates", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void logModeToolStripMenuItem_Click(object sender, EventArgs e)
