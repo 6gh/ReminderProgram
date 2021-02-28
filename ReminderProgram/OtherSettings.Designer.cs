@@ -107,7 +107,7 @@ namespace ReminderProgram
             this.label1.Size = new System.Drawing.Size(371, 34);
             this.label1.TabIndex = 0;
             this.label1.Text = "When you click \"Cancel\" on the remind message box, how\r\nlong (in minutes) would y" +
-    "ou like to reminded again?\r\n";
+    "ou like to be reminded again?\r\n";
             // 
             // groupBox2
             // 

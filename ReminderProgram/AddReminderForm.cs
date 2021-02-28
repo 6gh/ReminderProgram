@@ -12,6 +12,9 @@ namespace ReminderProgram
 {
     public partial class AddReminderForm : Form
     {
+        private static Timer timer = new Timer();
+        private static bool RanPreview = false;
+
         public AddReminderForm()
         {
             InitializeComponent();
@@ -19,6 +22,10 @@ namespace ReminderProgram
 
         private void AddReminderForm_Load(object sender, EventArgs e)
         {
+            //setup timer
+            timer.Interval = 1000;
+            timer.Tick += new EventHandler(timer_Tick);
+
             //setup form
             Icon = Properties.Resources.Icon;
 
@@ -34,6 +41,22 @@ namespace ReminderProgram
             minutenumericUpDown1.Value = now.Minute;
 
             repeatcomboBox1.SelectedIndex = 0; //repeat
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            if (RanPreview) return;
+
+            timer.Stop();
+
+            if (!OtherFunctions.ValidString(nametextBox1.Text)) MessageBox.Show("Please provide a name for the reminder.", "Invalid Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (!OtherFunctions.ValidString(textBox1.Text)) MessageBox.Show("Please provide text for the reminder.", "Invalid Text", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                //run reminder preview
+                Reminders.RunPreview(nametextBox1.Text, textBox1.Text, true);
+                RanPreview = true;
+            }
         }
 
         private void monthnumericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -73,14 +96,17 @@ namespace ReminderProgram
 
         private void previewbutton1_Click(object sender, EventArgs e)
         {
+            if (RanPreview) return;
+
             //check if texts are valid
             if (!OtherFunctions.ValidString(nametextBox1.Text)) MessageBox.Show("Please provide a name for the reminder.", "Invalid Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else if (!OtherFunctions.ValidString(textBox1.Text)) MessageBox.Show("Please provide text for the reminder.", "Invalid Text", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
                 //run reminder preview
+                RanPreview = true;
                 Reminders.RunPreview(nametextBox1.Text, textBox1.Text);
-
+                RanPreview = false;
             }
         }
 
@@ -110,6 +136,17 @@ namespace ReminderProgram
         private void AddReminderForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Form1.DataReload();
+        }
+
+        private void previewbutton1_MouseDown(object sender, MouseEventArgs e)
+        {
+            timer.Start();
+        }
+
+        private void previewbutton1_MouseUp(object sender, MouseEventArgs e)
+        {
+            timer.Stop();
+            RanPreview = false;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace ReminderProgram
@@ -88,15 +89,21 @@ namespace ReminderProgram
             return reminder;
         }
 
-        internal static void RunPreview(string name, string text)
+        internal static void RunPreview(string name, string text, bool dnd=false)
         {
-            text += $"\n\nClick Cancel to reremind in {Properties.Settings.Default.ReRemind} minutes";
-
-            DialogResult result = MessageBox.Show(text, name, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-
-            if (result == DialogResult.Cancel)
+            if(!dnd)
             {
-                MessageBox.Show($"Clicking this would usually remind you again in {Properties.Settings.Default.ReRemind} minutes (Change in Settings > Other Settings > Re-Remind) but since this is a preview, it will not.", "Preview", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                text += $"\n\nClick Cancel to reremind in {Properties.Settings.Default.ReRemind} minutes";
+
+                DialogResult result = MessageBox.Show(text, name, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+
+                if (result == DialogResult.Cancel)
+                {
+                    MessageBox.Show($"Clicking this would usually remind you again in {Properties.Settings.Default.ReRemind} minutes (Change in Settings > Other Settings > Re-Remind) but since this is a preview, it will not.", "Preview", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            } else
+            {
+                Form1.SendNotif(text, name);
             }
         }
 
@@ -117,7 +124,91 @@ namespace ReminderProgram
 
         internal static void Remove(string id)
         {
+            XmlStuff stuff = GetReminders(id);
+
+            if (stuff.Made)
+            {
+                foreach (XmlNode node in stuff.NodeList)
+                {
+                    stuff.Document.SelectSingleNode("Reminders").RemoveChild(node);
+                }
+
+                stuff.Document.Save(Properties.Settings.Default.RemindersPath);
+                Form1.DataReload();
+            }
+        }
+
+        internal static XmlStuff GetReminders(string id)
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            if (Valid(Properties.Settings.Default.RemindersPath))
+            {
+                //load xml file
+                xmlDocument.Load(Properties.Settings.Default.RemindersPath);
+            } else
+            {
+                Form1.DataReload();
+                return new XmlStuff();
+            }
+
+            //create object
+            XmlStuff xmlStuff = new XmlStuff(xmlDocument, xmlDocument.SelectNodes($"/Reminders/Reminder[@ID={id}]"));
+
+            //get nodes and return them
+            return xmlStuff;
+        }
+
+        internal static int Count()
+        {
+            if (Valid(Properties.Settings.Default.RemindersPath))
+            {
+                //load doc
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.Load(Properties.Settings.Default.RemindersPath);
+
+                //get reminders
+                XmlNodeList xmlNodeList = xmlDocument.SelectNodes("/Reminders/Reminder");
+
+                //return the count
+                return xmlNodeList.Count;
+            } else
+            {
+                Form1.DataReload();
+                return 0;
+            }
+        }
+
+        internal static void Start()
+        {
             throw new NotImplementedException();
         }
+
+        internal static void Stop()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class XmlStuff
+    {
+        public XmlStuff() {
+            Made = false;
+        }
+
+        public XmlStuff(XmlDocument doc, XmlNodeList nodeList)
+        {
+            Document = doc;
+            NodeList = nodeList;
+            Made = true;
+        }
+
+        public XmlDocument Document { get; set; }
+        public XmlNodeList NodeList { get; set; }
+        public bool Made { get; set; }
+        /*
+        public XmlNode GetFirstNode()
+        {
+            return NodeList.Item(0);
+        }*/
     }
 }

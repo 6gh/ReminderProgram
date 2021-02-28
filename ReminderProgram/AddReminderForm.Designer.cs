@@ -324,6 +324,8 @@ namespace ReminderProgram
             this.previewbutton1.Text = "Preview";
             this.previewbutton1.UseVisualStyleBackColor = true;
             this.previewbutton1.Click += new System.EventHandler(this.previewbutton1_Click);
+            this.previewbutton1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.previewbutton1_MouseDown);
+            this.previewbutton1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.previewbutton1_MouseUp);
             // 
             // addbutton1
             // 
@@ -360,7 +362,7 @@ namespace ReminderProgram
             this.closeAfterAddToolStripMenuItem.CheckOnClick = true;
             this.closeAfterAddToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.closeAfterAddToolStripMenuItem.Name = "closeAfterAddToolStripMenuItem";
-            this.closeAfterAddToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.closeAfterAddToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
             this.closeAfterAddToolStripMenuItem.Text = "Close After Add";
             this.closeAfterAddToolStripMenuItem.ToolTipText = "After the reminder is added, should this window close?";
             // 
@@ -374,6 +376,7 @@ namespace ReminderProgram
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
             this.Name = "AddReminderForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add Reminder";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddReminderForm_FormClosing);
             this.Load += new System.EventHandler(this.AddReminderForm_Load);
