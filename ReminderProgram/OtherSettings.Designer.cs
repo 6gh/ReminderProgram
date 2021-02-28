@@ -40,10 +40,14 @@ namespace ReminderProgram
             this.label2 = new System.Windows.Forms.Label();
             this.tnumericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button1 = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rnumericUpDown1)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tnumericUpDown1)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -174,7 +178,7 @@ namespace ReminderProgram
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(348, 224);
+            this.button1.Location = new System.Drawing.Point(349, 332);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 30);
             this.button1.TabIndex = 2;
@@ -182,11 +186,43 @@ namespace ReminderProgram
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.checkBox1);
+            this.groupBox3.Controls.Add(this.label9);
+            this.groupBox3.Location = new System.Drawing.Point(12, 224);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(752, 100);
+            this.groupBox3.TabIndex = 5;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Start On Startup";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(15, 35);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(365, 34);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "Do you want the reminders to start when you start up the\r\nprogram?";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(513, 40);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(48, 21);
+            this.checkBox1.TabIndex = 4;
+            this.checkBox1.Text = "No";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // OtherSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(776, 266);
+            this.ClientSize = new System.Drawing.Size(776, 374);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -203,6 +239,8 @@ namespace ReminderProgram
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tnumericUpDown1)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -220,5 +258,8 @@ namespace ReminderProgram
         private System.Windows.Forms.NumericUpDown tnumericUpDown1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

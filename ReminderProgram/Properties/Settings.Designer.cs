@@ -118,5 +118,17 @@ namespace ReminderProgram.Properties {
                 this["TimerInterval"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool StartOnStartup {
+            get {
+                return ((bool)(this["StartOnStartup"]));
+            }
+            set {
+                this["StartOnStartup"] = value;
+            }
+        }
     }
 }

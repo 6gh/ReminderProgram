@@ -23,6 +23,7 @@ namespace ReminderProgram
 
             rnumericUpDown1.Value = Properties.Settings.Default.ReRemind;
             tnumericUpDown1.Value = Properties.Settings.Default.TimerInterval;
+            checkBox1.Checked = Properties.Settings.Default.StartOnStartup;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -40,6 +41,20 @@ namespace ReminderProgram
         private void OtherSettings_FormClosed(object sender, FormClosedEventArgs e)
         {
             Form1.DataReload();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.StartOnStartup = checkBox1.Checked;
+            Properties.Settings.Default.Save();
+
+            if (checkBox1.Checked)
+            {
+                checkBox1.Text = "Yes";
+            } else
+            {
+                checkBox1.Text = "No";
+            }
         }
     }
 }

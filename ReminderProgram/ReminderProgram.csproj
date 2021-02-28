@@ -59,7 +59,14 @@
     <Compile Include="AddReminderForm.Designer.cs">
       <DependentUpon>AddReminderForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Convertions.cs" />
     <Compile Include="Debugger.cs" />
+    <Compile Include="EditReminderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditReminderForm.Designer.cs">
+      <DependentUpon>EditReminderForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FirstTimeSetup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,6 +92,9 @@
     <Compile Include="Updates.cs" />
     <EmbeddedResource Include="AddReminderForm.resx">
       <DependentUpon>AddReminderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditReminderForm.resx">
+      <DependentUpon>EditReminderForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FirstTimeSetup.resx">
       <DependentUpon>FirstTimeSetup.cs</DependentUpon>

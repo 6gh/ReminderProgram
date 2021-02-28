@@ -70,6 +70,28 @@ namespace ReminderProgram
 
             //check for updates
             Updates.Check(true);
+
+            //if startonstartup
+            if (Properties.Settings.Default.StartOnStartup)
+            {
+                //disable controls
+                importCtrlOToolStripMenuItem.Enabled = false;
+                exportCtrlSToolStripMenuItem.Enabled = false;
+                setupStripMenuItem1.Enabled = false;
+
+                otherSettingsToolStripMenuItem.Enabled = false;
+
+                addButton.Enabled = false;
+                removeButton.Enabled = false;
+                refreshButton.Enabled = false;
+                previewButton.Enabled = false;
+                startButton.Enabled = false;
+                editButton.Enabled = false;
+                stopButton.Enabled = true;
+
+                //start reminding
+                Reminders.Start();
+            }
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -338,6 +360,7 @@ namespace ReminderProgram
             refreshButton.Enabled = false;
             previewButton.Enabled = false;
             startButton.Enabled = false;
+            editButton.Enabled = false;
             stopButton.Enabled = true;
 
             //start reminding
@@ -358,6 +381,7 @@ namespace ReminderProgram
             refreshButton.Enabled = true;
             previewButton.Enabled = true;
             startButton.Enabled = true;
+            editButton.Enabled = true;
             stopButton.Enabled = false;
 
             //stop reminding
@@ -430,6 +454,14 @@ namespace ReminderProgram
                 }
                 DataReload();
             }
+        }
+
+        private void editButton_Click(object sender, EventArgs e)
+        { 
+            EditReminderForm.id = dataGridView1.Rows[dataGridView1.CurrentCell.RowIndex].Cells["ID"].Value.ToString();
+
+            EditReminderForm editReminderForm = new EditReminderForm();
+            editReminderForm.ShowDialog();
         }
     }
 }

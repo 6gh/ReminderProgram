@@ -68,6 +68,7 @@ namespace ReminderProgram
             this.startButton = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.editButton = new System.Windows.Forms.Button();
             this.taskiconMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -157,7 +158,7 @@ namespace ReminderProgram
             // 
             this.importCtrlOToolStripMenuItem.Name = "importCtrlOToolStripMenuItem";
             this.importCtrlOToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.importCtrlOToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.importCtrlOToolStripMenuItem.Size = new System.Drawing.Size(222, 26);
             this.importCtrlOToolStripMenuItem.Text = "Import...";
             this.importCtrlOToolStripMenuItem.Click += new System.EventHandler(this.importCtrlOToolStripMenuItem_Click);
             // 
@@ -165,51 +166,51 @@ namespace ReminderProgram
             // 
             this.exportCtrlSToolStripMenuItem.Name = "exportCtrlSToolStripMenuItem";
             this.exportCtrlSToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.exportCtrlSToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.exportCtrlSToolStripMenuItem.Size = new System.Drawing.Size(222, 26);
             this.exportCtrlSToolStripMenuItem.Text = "Export...";
             this.exportCtrlSToolStripMenuItem.Click += new System.EventHandler(this.exportCtrlSToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(219, 6);
             // 
             // setupStripMenuItem1
             // 
             this.setupStripMenuItem1.Name = "setupStripMenuItem1";
-            this.setupStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.setupStripMenuItem1.Size = new System.Drawing.Size(222, 26);
             this.setupStripMenuItem1.Text = "Run Setup...";
             this.setupStripMenuItem1.Click += new System.EventHandler(this.setupStripMenuItem1_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(219, 6);
             // 
             // updateStripMenuItem1
             // 
             this.updateStripMenuItem1.Name = "updateStripMenuItem1";
-            this.updateStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.updateStripMenuItem1.Size = new System.Drawing.Size(222, 26);
             this.updateStripMenuItem1.Text = "Check for Updates...";
             this.updateStripMenuItem1.Click += new System.EventHandler(this.updateStripMenuItem1_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(219, 6);
             // 
             // versionStripMenuItem1
             // 
             this.versionStripMenuItem1.Enabled = false;
             this.versionStripMenuItem1.Name = "versionStripMenuItem1";
-            this.versionStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.versionStripMenuItem1.Size = new System.Drawing.Size(222, 26);
             this.versionStripMenuItem1.Text = "Version: {VERSION}";
             // 
             // version2StripMenuItem2
             // 
             this.version2StripMenuItem2.Enabled = false;
             this.version2StripMenuItem2.Name = "version2StripMenuItem2";
-            this.version2StripMenuItem2.Size = new System.Drawing.Size(224, 26);
+            this.version2StripMenuItem2.Size = new System.Drawing.Size(222, 26);
             this.version2StripMenuItem2.Text = "{UPTODATEMSG}";
             // 
             // settingsToolStripMenuItem
@@ -228,7 +229,7 @@ namespace ReminderProgram
             // 
             this.doNotDisturbToolStripMenuItem.CheckOnClick = true;
             this.doNotDisturbToolStripMenuItem.Name = "doNotDisturbToolStripMenuItem";
-            this.doNotDisturbToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.doNotDisturbToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
             this.doNotDisturbToolStripMenuItem.Text = "Do Not Disturb";
             this.doNotDisturbToolStripMenuItem.ToolTipText = "Show Balloons instead of Message Boxes? (WILL NOT BE ABLE TO REREMIND)";
             this.doNotDisturbToolStripMenuItem.Click += new System.EventHandler(this.doNotDisturbToolStripMenuItem_Click);
@@ -237,7 +238,7 @@ namespace ReminderProgram
             // 
             this.startOnStartupToolStripMenuItem.CheckOnClick = true;
             this.startOnStartupToolStripMenuItem.Name = "startOnStartupToolStripMenuItem";
-            this.startOnStartupToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.startOnStartupToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
             this.startOnStartupToolStripMenuItem.Text = "Start on Startup";
             this.startOnStartupToolStripMenuItem.ToolTipText = "Run Program on Windows Startup?";
             this.startOnStartupToolStripMenuItem.Click += new System.EventHandler(this.startOnStartupToolStripMenuItem_Click);
@@ -246,7 +247,7 @@ namespace ReminderProgram
             // 
             this.updaterStripMenuItem1.CheckOnClick = true;
             this.updaterStripMenuItem1.Name = "updaterStripMenuItem1";
-            this.updaterStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.updaterStripMenuItem1.Size = new System.Drawing.Size(196, 26);
             this.updaterStripMenuItem1.Text = "Updater";
             this.updaterStripMenuItem1.ToolTipText = "Check for updates when program is launched?";
             this.updaterStripMenuItem1.Click += new System.EventHandler(this.updaterStripMenuItem1_Click);
@@ -254,12 +255,12 @@ namespace ReminderProgram
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(193, 6);
             // 
             // otherSettingsToolStripMenuItem
             // 
             this.otherSettingsToolStripMenuItem.Name = "otherSettingsToolStripMenuItem";
-            this.otherSettingsToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.otherSettingsToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
             this.otherSettingsToolStripMenuItem.Text = "Other Settings";
             this.otherSettingsToolStripMenuItem.Click += new System.EventHandler(this.otherSettingsToolStripMenuItem_Click);
             // 
@@ -276,7 +277,7 @@ namespace ReminderProgram
             // 
             this.logModeToolStripMenuItem.CheckOnClick = true;
             this.logModeToolStripMenuItem.Name = "logModeToolStripMenuItem";
-            this.logModeToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.logModeToolStripMenuItem.Size = new System.Drawing.Size(160, 26);
             this.logModeToolStripMenuItem.Text = "Log Mode";
             this.logModeToolStripMenuItem.Click += new System.EventHandler(this.logModeToolStripMenuItem_Click);
             // 
@@ -307,6 +308,7 @@ namespace ReminderProgram
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.editButton);
             this.groupBox2.Controls.Add(this.previewButton);
             this.groupBox2.Controls.Add(this.refreshButton);
             this.groupBox2.Controls.Add(this.removeButton);
@@ -320,7 +322,7 @@ namespace ReminderProgram
             // 
             // previewButton
             // 
-            this.previewButton.Location = new System.Drawing.Point(725, 32);
+            this.previewButton.Location = new System.Drawing.Point(745, 32);
             this.previewButton.Name = "previewButton";
             this.previewButton.Size = new System.Drawing.Size(90, 30);
             this.previewButton.TabIndex = 3;
@@ -332,7 +334,7 @@ namespace ReminderProgram
             // 
             // refreshButton
             // 
-            this.refreshButton.Location = new System.Drawing.Point(516, 32);
+            this.refreshButton.Location = new System.Drawing.Point(580, 32);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(90, 30);
             this.refreshButton.TabIndex = 2;
@@ -342,7 +344,7 @@ namespace ReminderProgram
             // 
             // removeButton
             // 
-            this.removeButton.Location = new System.Drawing.Point(272, 32);
+            this.removeButton.Location = new System.Drawing.Point(212, 32);
             this.removeButton.Name = "removeButton";
             this.removeButton.Size = new System.Drawing.Size(90, 30);
             this.removeButton.TabIndex = 1;
@@ -352,7 +354,7 @@ namespace ReminderProgram
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(62, 32);
+            this.addButton.Location = new System.Drawing.Point(40, 32);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(90, 30);
             this.addButton.TabIndex = 0;
@@ -374,7 +376,7 @@ namespace ReminderProgram
             // stopButton
             // 
             this.stopButton.Enabled = false;
-            this.stopButton.Location = new System.Drawing.Point(516, 32);
+            this.stopButton.Location = new System.Drawing.Point(488, 32);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(90, 30);
             this.stopButton.TabIndex = 5;
@@ -384,7 +386,7 @@ namespace ReminderProgram
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(272, 32);
+            this.startButton.Location = new System.Drawing.Point(304, 32);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(90, 30);
             this.startButton.TabIndex = 4;
@@ -407,6 +409,16 @@ namespace ReminderProgram
             this.saveFileDialog1.Filter = "XML Files (*.xml)|*.xml";
             this.saveFileDialog1.FilterIndex = 2;
             this.saveFileDialog1.Title = "Export Reminders XML";
+            // 
+            // editButton
+            // 
+            this.editButton.Location = new System.Drawing.Point(394, 32);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(90, 30);
+            this.editButton.TabIndex = 4;
+            this.editButton.Text = "Edit";
+            this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
             // 
             // Form1
             // 
@@ -478,6 +490,7 @@ namespace ReminderProgram
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button editButton;
     }
 }
 

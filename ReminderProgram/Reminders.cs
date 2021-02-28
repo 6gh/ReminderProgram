@@ -12,6 +12,9 @@ namespace ReminderProgram
     public class Reminders
     {
         public static string[] validRepeats = { "Once", "Daily", "Weekly", "Monthly", "Yearly" };
+        public static System.Timers.Timer IntervalTimer = new System.Timers.Timer();
+        public static bool Running = false;
+        public static Reminder[] reminders;
 
         public static bool Valid(string path)
         {
@@ -122,6 +125,16 @@ namespace ReminderProgram
             }
         }
 
+        internal static void Add(XElement element)
+        {
+            if (Valid(Properties.Settings.Default.RemindersPath))
+            {
+                XDocument doc = XDocument.Load(Properties.Settings.Default.RemindersPath);
+                doc.Element("Reminders").Add(element);
+                doc.Save(Properties.Settings.Default.RemindersPath);
+            }
+        }
+
         internal static void Remove(string id)
         {
             XmlStuff stuff = GetReminders(id);
@@ -136,6 +149,23 @@ namespace ReminderProgram
                 stuff.Document.Save(Properties.Settings.Default.RemindersPath);
                 Form1.DataReload();
             }
+        }
+
+        internal static void Edit(string id, string name, string text, DateTime dateTime, string repeat)
+        {
+            XmlStuff stuff = GetReminders(id);
+
+            foreach (XmlNode node in stuff.NodeList)
+            {
+                node["Title"].InnerText = name;
+                node["Context"].InnerText = text;
+                node["Date"].InnerText = dateTime.ToString("MM/dd/yyyy");
+                node["Time"].InnerText = dateTime.ToString("HH:mm");
+                node["Repeat"].InnerText = repeat;
+            }
+
+            stuff.Document.Save(Properties.Settings.Default.RemindersPath);
+            Form1.DataReload();
         }
 
         internal static XmlStuff GetReminders(string id)
@@ -180,12 +210,261 @@ namespace ReminderProgram
 
         internal static void Start()
         {
-            throw new NotImplementedException();
+            if (Running) MessageBox.Show("The program is already running!", "Start", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+            {
+                if (Valid(Properties.Settings.Default.RemindersPath))
+                {
+                    //load doc
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(Properties.Settings.Default.RemindersPath);
+
+                    //get all reminders
+                    XmlNodeList xmlNodeList = doc.SelectNodes("/Reminders/Reminder");
+
+                    //add all the nodes to the reminders array
+
+                    reminders = new Reminder[Count()];
+
+                    for (int i = 0; i < Count(); i++)
+                    {
+                        XmlNode node = xmlNodeList[i];
+
+                        string[] date = node.SelectSingleNode("Date").InnerText.Split('/');
+                        string[] time = node.SelectSingleNode("Time").InnerText.Split(':');
+
+                        DateTime reminderdatetime = new DateTime(Convertions.ToInt(date[2]), Convertions.ToInt(date[0]), Convertions.ToInt(date[1]), Convertions.ToInt(time[0]), Convertions.ToInt(time[1]), 0);
+                        Reminder reminder = new Reminder(node.SelectSingleNode("Title").InnerText, node.SelectSingleNode("Context").InnerText, reminderdatetime, node.SelectSingleNode("Repeat").InnerText, node.Attributes.Item(0).InnerText);
+
+                        reminders.SetValue(reminder, i);
+
+                        Console.WriteLine(reminder.ToString());
+                    }
+
+                    Debugger.Log("Reminders", "Reminder Count: " + reminders.Length.ToString());
+
+                    //setup timer
+                    IntervalTimer.Interval = Properties.Settings.Default.TimerInterval * 1000;
+                    IntervalTimer.Elapsed += IntervalTimer_Elapsed;
+
+                    //start timer
+                    IntervalTimer.Start();
+
+                    //set the variable
+                    Running = true;
+                }
+            }
+        }
+
+        private static void IntervalTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            //get current time
+            DateTime dateTime = DateTime.Now;
+
+            //see if any reminders are due now
+            for (int i = 0; i < reminders.Length; i++)
+            {
+                Reminder reminder = reminders.ElementAt(i);
+
+                if (!Running) break; //stop if not running
+
+                if (reminder.Ran) return; //if reminder already ran, skip
+
+                if (dateTime.ToString("MM/dd/yyyy HH:mm") == reminder.DateTime.ToString("MM/dd/yyyy HH:mm")) //if this reminder is due now
+                {
+                    Debugger.Log("Reminders", "found Reminder due now");
+                    //set ran bool
+                    reminder.Ran = true;
+
+                    if (!Properties.Settings.Default.DoNotDisturb) //if not in dnd mode
+                    {
+                        //setup text
+                        reminder.Text += $"\n\nClick Cancel to reremind in {Properties.Settings.Default.ReRemind} minutes";
+
+                        //see if reremind or not
+                        Debugger.Log("Reminders", "showing reminder");
+                        DialogResult result = MessageBox.Show(reminder.Text, reminder.Name, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                        if (result == DialogResult.Cancel) //if reremind
+                        {
+                            Debugger.Log("Reminders", "setting up rereminder");
+                            Reminder reminder1 = new Reminder(reminder.Name, reminder.Text, reminder.DateTime.AddMinutes(Convert.ToDouble(Properties.Settings.Default.ReRemind)), reminder.Repeat, reminder.ID);
+                            reminders.Append(reminder1);
+                        }
+                        else //if not reremind
+                        {
+                            Debugger.Log("Reminders", "no reremind");
+                            //get next repeat
+                            string nextRepeat = reminder.NextRepeat();
+
+                            if (nextRepeat != null) //if there is a repeat
+                            {
+                                Debugger.Log("Reminders", $"found repeat: {reminder.Repeat}");
+
+                                //setup datetime
+                                string[] nextDateTime = nextRepeat.Split(' ');
+                                string[] date = nextDateTime[0].Split('/');
+                                string[] time = nextDateTime[1].Split(':');
+                                reminder.Text = reminder.Text.Replace($"\n\nClick Cancel to reremind in {Properties.Settings.Default.ReRemind} minutes", "");
+
+                                DateTime reminderdatetime = new DateTime(Convertions.ToInt(date[2]), Convertions.ToInt(date[0]), Convertions.ToInt(date[1]), Convertions.ToInt(time[0]), Convertions.ToInt(time[1]), 0);
+
+                                //delete current reminder
+                                Remove(reminder.ID);
+                                Debugger.Log("Reminders", "removed old reminder");
+
+                                //create new one with new date
+                                XElement newReminder = Generate(reminder.Name, reminder.Text, reminderdatetime, reminder.Repeat);
+                                Add(newReminder);
+                                Debugger.Log("Reminders", "made new reminder");
+
+                                //create new reminder for array
+                                reminders.Append(new Reminder(reminder.Name, reminder.Text, reminderdatetime, reminder.Repeat, Convertions.ToXmlNode(newReminder).Attributes.Item(1).InnerText));
+                            } else
+                            {
+                                Debugger.Log("Reminders", "no repeat | only once");
+
+                                if (Count() > 1)
+                                {
+                                    //delete current reminder
+                                    Remove(reminder.ID);
+                                    Debugger.Log("Reminders", "removed old reminder");
+                                } else if (Count() == 1)
+                                {
+                                    //show messagebox
+                                    MessageBox.Show("Finished the only reminder\nYou may stop now, or else the program will continue checking for reminders.", "Finished!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    Debugger.Log("Reminders", "ONLY ONE REMINDER | not deleting");
+                                }
+                            }
+                        }
+                    } else //if you are in dnd mode
+                    {
+                        Debugger.Log("Reminders", "dnd mode");
+
+                        //send notification
+                        Form1.SendNotif(reminder.Text, reminder.Name);
+
+                        //get next repeat
+                        string nextRepeat = reminder.NextRepeat();
+
+                        if (nextRepeat != null) //if there is a repeat
+                        {
+                            Debugger.Log("Reminders", $"found repeat: {reminder.Repeat}");
+
+                            //setup datetime
+                            string[] nextDateTime = nextRepeat.Split(' ');
+                            string[] date = nextDateTime[0].Split('/');
+                            string[] time = nextDateTime[1].Split(':');
+
+                            DateTime reminderdatetime = new DateTime(Convertions.ToInt(date[2]), Convertions.ToInt(date[0]), Convertions.ToInt(date[1]), Convertions.ToInt(time[0]), Convertions.ToInt(time[1]), 0);
+
+                            //delete current reminder
+                            Remove(reminder.ID);
+                            Debugger.Log("Reminders", "removed old reminder");
+
+                            //create new one with new date
+                            XElement newReminder = Generate(reminder.Name, reminder.Text, reminderdatetime, reminder.Repeat);
+                            Add(newReminder);
+                            Debugger.Log("Reminders", "made new reminder");
+
+                            //create new reminder for array
+                            reminders.Append(new Reminder(reminder.Name, reminder.Text, reminderdatetime, reminder.Repeat, Convertions.ToXmlNode(newReminder).Attributes.Item(1).InnerText));
+                        }
+                        else
+                        {
+                            Debugger.Log("Reminders", "no repeat | only once");
+
+                            if (Count() > 1)
+                            {
+                                //delete current reminder
+                                Remove(reminder.ID);
+                                Debugger.Log("Reminders", "removed old reminder");
+                            }
+                            else if (Count() == 1)
+                            {
+                                //show messagebox
+                                Form1.SendNotif("Finished the only reminder\nYou may stop now, or else the program will continue going checking for reminders.", "Finished!");
+                                Debugger.Log("Reminders", "ONLY ONE REMINDER | not deleting");
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         internal static void Stop()
         {
-            throw new NotImplementedException();
+            if (!Running) MessageBox.Show("The program is already stopped!", "Stop", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+            {
+                //set variable
+                Running = false;
+
+                //stop timer
+                IntervalTimer.Stop();
+
+                //reset variable
+                Reminder[] empty = { };
+                reminders = empty;
+
+                //alternative method
+                //Array.Clear(reminders, 0, reminders.Length);
+            }
+        }
+    }
+
+    public class Reminder
+    {
+        public Reminder(string name, string text, DateTime dateTime, string repeat, string id)
+        {
+            Name = name;
+            Text = text;
+            DateTime = dateTime;
+            Repeat = repeat;
+            ID = id;
+            Ran = false;
+        }
+
+        public string Name { get; set; }
+        public string Text { get; set; }
+        public DateTime DateTime { get; set; }
+        public string Repeat { get; set; }
+        public bool Ran { get; set; }
+        public string ID { get; set; }
+
+        public string NextRepeat()
+        {
+            if (Repeat == "Once")
+            {
+                return null;
+            }
+            else if (Repeat == "Daily")
+            {
+                return DateTime.AddDays(1).ToString("MM/dd/yyyy HH:mm");
+            }
+            else if (Repeat == "Weekly")
+            {
+                return DateTime.AddDays(7).ToString("MM/dd/yyyy HH:mm");
+            }
+            else if (Repeat == "Monthly")
+            {
+                return DateTime.AddMonths(1).ToString("MM/dd/yyyy HH:mm");
+            }
+            else if (Repeat == "Yearly")
+            {
+                return DateTime.AddYears(1).ToString("MM/dd/yyyy HH:mm");
+            } else
+            {
+                return null;
+            }
+        }
+        public override string ToString()
+        {
+            return $"{ID}:" +
+                $"\n   Name: {Name}" +
+                $"\n   Text: {Text}" +
+                $"\n   DateTime: {DateTime.ToString("MM/dd/yyyy HH:mm")}" +
+                $"\n   Repeat: {Repeat}" +
+                $"\n   Ran: {Ran}";
         }
     }
 
