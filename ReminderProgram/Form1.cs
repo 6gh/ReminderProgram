@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -92,6 +93,17 @@ namespace ReminderProgram
                 //start reminding
                 Reminders.Start();
             }
+
+            //add event listener for sleep mode and such
+            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+        }
+
+        private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            if(e.Mode == PowerModes.Suspend)
+            {
+                Reminders.Stop(false);
+            }
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -114,15 +126,19 @@ namespace ReminderProgram
 
         internal static void DataReload()
         {
-            dataGridView.DataSource = null;
-            dataGridView.Refresh();
             DataSet ds = new DataSet();
+
             if (Reminders.Valid(Properties.Settings.Default.RemindersPath))
             {
-                ds.ReadXml(Properties.Settings.Default.RemindersPath);
-                dataGridView.DataSource = ds.Tables[0];
-                dataGridView.Refresh();
-            } else
+                dataGridView.Invoke(new Action(() =>
+                {
+                    dataGridView.DataSource = null;
+                    ds.ReadXml(Properties.Settings.Default.RemindersPath);
+                    dataGridView.DataSource = ds.Tables[0];
+                    dataGridView.Refresh();
+                }));
+            } 
+            else
             {
                 DialogResult result;
 

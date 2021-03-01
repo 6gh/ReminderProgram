@@ -133,6 +133,10 @@ namespace ReminderProgram
                 doc.Element("Reminders").Add(element);
                 doc.Save(Properties.Settings.Default.RemindersPath);
             }
+            else
+            {
+                Form1.DataReload();
+            }
         }
 
         internal static void Remove(string id)
@@ -279,16 +283,19 @@ namespace ReminderProgram
                     if (!Properties.Settings.Default.DoNotDisturb) //if not in dnd mode
                     {
                         //setup text
-                        reminder.Text += $"\n\nClick Cancel to reremind in {Properties.Settings.Default.ReRemind} minutes";
+                        string newText = $"{reminder.Text}\n\nClick Cancel to reremind in {Properties.Settings.Default.ReRemind} minutes";
 
                         //see if reremind or not
                         Debugger.Log("Reminders", "showing reminder");
-                        DialogResult result = MessageBox.Show(reminder.Text, reminder.Name, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                        DialogResult result = MessageBox.Show(newText, reminder.Name, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+
                         if (result == DialogResult.Cancel) //if reremind
                         {
                             Debugger.Log("Reminders", "setting up rereminder");
-                            Reminder reminder1 = new Reminder(reminder.Name, reminder.Text, reminder.DateTime.AddMinutes(Convert.ToDouble(Properties.Settings.Default.ReRemind)), reminder.Repeat, reminder.ID);
-                            reminders.Append(reminder1);
+
+                            //create new settings for reminder
+                            reminder.DateTime = reminder.DateTime.AddMinutes(Convert.ToDouble(Properties.Settings.Default.ReRemind));
+                            reminder.Ran = false;
                         }
                         else //if not reremind
                         {
@@ -304,21 +311,15 @@ namespace ReminderProgram
                                 string[] nextDateTime = nextRepeat.Split(' ');
                                 string[] date = nextDateTime[0].Split('/');
                                 string[] time = nextDateTime[1].Split(':');
-                                reminder.Text = reminder.Text.Replace($"\n\nClick Cancel to reremind in {Properties.Settings.Default.ReRemind} minutes", "");
 
                                 DateTime reminderdatetime = new DateTime(Convertions.ToInt(date[2]), Convertions.ToInt(date[0]), Convertions.ToInt(date[1]), Convertions.ToInt(time[0]), Convertions.ToInt(time[1]), 0);
 
-                                //delete current reminder
-                                Remove(reminder.ID);
-                                Debugger.Log("Reminders", "removed old reminder");
+                                //edit current reminder
+                                Edit(reminder.ID, reminder.Name, reminder.Text, reminderdatetime, reminder.Repeat);
 
-                                //create new one with new date
-                                XElement newReminder = Generate(reminder.Name, reminder.Text, reminderdatetime, reminder.Repeat);
-                                Add(newReminder);
-                                Debugger.Log("Reminders", "made new reminder");
-
-                                //create new reminder for array
-                                reminders.Append(new Reminder(reminder.Name, reminder.Text, reminderdatetime, reminder.Repeat, Convertions.ToXmlNode(newReminder).Attributes.Item(1).InnerText));
+                                //create new settings for reminder
+                                reminder.DateTime = reminderdatetime;
+                                reminder.Ran = false;
                             } else
                             {
                                 Debugger.Log("Reminders", "no repeat | only once");
@@ -366,8 +367,9 @@ namespace ReminderProgram
                             Add(newReminder);
                             Debugger.Log("Reminders", "made new reminder");
 
-                            //create new reminder for array
-                            reminders.Append(new Reminder(reminder.Name, reminder.Text, reminderdatetime, reminder.Repeat, Convertions.ToXmlNode(newReminder).Attributes.Item(1).InnerText));
+                            //create new settings for reminder
+                            reminder.DateTime = reminderdatetime;
+                            reminder.Ran = false;
                         }
                         else
                         {
@@ -391,9 +393,9 @@ namespace ReminderProgram
             }
         }
 
-        internal static void Stop()
+        internal static void Stop(bool ShowMessage = true)
         {
-            if (!Running) MessageBox.Show("The program is already stopped!", "Stop", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            if (!Running && ShowMessage) MessageBox.Show("The program is already stopped!", "Stop", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
                 //set variable
